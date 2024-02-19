@@ -23,7 +23,7 @@ func createJobFunction(username:String,name:String,des:String,date:Date,img:Stri
 
             do{
                
-                docRef.setData(["creator": username,"name":name,"des":des+" - \(username)","date":date,"posted":Date.now,"img": img,"zipcode":mylocation,"onlyverified":onlyverified,"done":false,"hours":hours]) { error in
+                docRef.setData(["creator": username,"name":name,"des":des+" - \(username)","date":date,"posted":Date.now,"img": img,"zipcode":mylocation,"onlyverified":onlyverified,"status":"open","hours":hours]) { error in
                     if let error = error {
                         print("Error writing document: \(error)")
                     } else {

@@ -13,6 +13,8 @@ import FirebaseStorage
 struct ProfileView: View {
     @State var image: String
     @State var name:String
+    @State var volunteerhours:Double = 0
+    @State var jobscompleted = 0
     @State var job:String
     @Environment(\.colorScheme) var colorScheme
     @State var showFinishedAlert = false
@@ -49,6 +51,17 @@ struct ProfileView: View {
                     .font(.title)
                     .foregroundColor(.secondary)
                 
+                HStack{
+                    Spacer()
+                    Text("Jobs \(jobscompleted)")
+                        .font(.headline)
+                        .bold()
+                    Spacer()
+                    Text("Hours \(volunteerhours,specifier: "%.1f")")
+                        .font(.headline)
+                        .bold()
+                    Spacer()
+                }
                 Divider()
                     .background(Color.secondary)
                     .foregroundColor(.primary)
@@ -59,10 +72,11 @@ struct ProfileView: View {
                         
                     }
                     .buttonStyle(GrowingButton())
+                    Divider()
+                        .background(Color.secondary)
+                        .foregroundColor(.primary)
                 }
-                Divider()
-                    .background(Color.secondary)
-                    .foregroundColor(.primary)
+               
                 //            InfoRowView(title: "Email", value: "johndoe@example.com")
                 InfoRowView(title: "    Phone", value: "\(myphonenumber)     ")
                 InfoRowView(title: "    Zipcode", value: "\(mylocation)      ")
@@ -76,7 +90,7 @@ struct ProfileView: View {
                         if job.done == true{
                             HStack{
                                 Spacer()
-                                VStack(alignment: .leading,spacing:6){
+                                VStack(alignment: .leading,spacing:10){
                                     
                                     Text(job.name)
                                         .multilineTextAlignment(.leading)
@@ -85,7 +99,7 @@ struct ProfileView: View {
                                         .font(Font.title2.bold())
                                         .foregroundColor(.primary)
                                     
-                                    Spacer()
+                        
                                     Text("Helped : \(job.helped)")
                                         .multilineTextAlignment(.leading)
 //                                        .fixedSize(horizontal: false, vertical: true)
@@ -101,13 +115,69 @@ struct ProfileView: View {
                                         .foregroundColor(.secondary)
                                         .foregroundColor(.secondary)
                                     
+                                    Spacer()
+                                    stars(rate: job.rating)
+                                    
+                                      
+                                    Text("'\(job.comment)' - \(job.helped)")
+                                            .multilineTextAlignment(.leading)
+                                        //                                        .fixedSize(horizontal: false, vertical: true)
+                                            .lineLimit(3)
+                                            .bold()
+                                  
+                                    
                                     
                                 }
                                 Spacer()
                                 
-                            }   .padding(15)
+                            }
+                            .onAppear{
+                                
+                                for i in model.accepts{
+                                    if i.helper == username{
+                                        if i.done == true{
+                                            jobscompleted = jobscompleted+1
+                                        }
+                                    }
+                                }
+                                
+                                
+                                //Get all volunteer hours
+                                
+
+                     
+                                if job.hours == "10 min"{
+                                        volunteerhours = volunteerhours+0.16
+                                    }
+                                if job.hours == "15 min"{
+                                        volunteerhours = volunteerhours+0.25
+                                    }
+                                if job.hours == "30 min"{
+                                        volunteerhours = volunteerhours+0.5
+                                    }
+                                    if job.hours == "1 hour"{
+                                        volunteerhours = volunteerhours+1
+                                    }
+                                    if job.hours == "1 hour and 30 min"{
+                                        volunteerhours = volunteerhours+1.5
+                                    }
+                                    if job.hours == "2 hours"{
+                                        volunteerhours = volunteerhours+2
+                                    }
+                                    if job.hours == "3 hours"{
+                                        volunteerhours = volunteerhours+3
+                                    }
+                                    if job.hours == "4 hours"{
+                                        volunteerhours = volunteerhours+4
+                                    }
+                                    if job.hours == "4+ hours"{
+                                        volunteerhours = volunteerhours+5
+                                    }
+                                    
+                                
+                            }.padding(15)
                                 .background(colorScheme == .dark ? Color("#121212") : Color.white)
-                                .frame(width: UIScreen.main.bounds.width - 50,height:120,alignment: .leading)
+                                .frame(width: UIScreen.main.bounds.width - 50,height:200,alignment: .leading)
                                 .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
                                 .shadow(color: colorScheme == .dark ? .white.opacity(0.01) : .black.opacity(0.1), radius: 15, x: 0, y: 5)
                             
@@ -119,6 +189,8 @@ struct ProfileView: View {
         }
         .onAppear{
             model.getData()
+            jobscompleted = 0
+            volunteerhours = 0
         }
         .padding()
         .background(Color("ProfileBackground"))
@@ -221,3 +293,67 @@ struct InfoRowView: View {
         .padding(.vertical, 4)
     }
 }
+
+
+
+struct stars:View{
+    var rate:String
+    var body: some View{
+        if rate == "1"{
+            HStack{
+                Image(systemName: "star.fill").foregroundColor(.yellow)
+                Image(systemName: "star").foregroundColor(.yellow)
+                Image(systemName: "star").foregroundColor(.yellow)
+                Image(systemName: "star").foregroundColor(.yellow)
+                Image(systemName: "star").foregroundColor(.yellow)
+                
+                
+            }
+        }
+        if rate == "2"{
+            HStack{
+                Image(systemName: "star.fill").foregroundColor(.yellow)
+                Image(systemName: "star.fill").foregroundColor(.yellow)
+                Image(systemName: "star").foregroundColor(.yellow)
+                Image(systemName: "star").foregroundColor(.yellow)
+                Image(systemName: "star").foregroundColor(.yellow)
+                
+            }
+        }
+        if rate == "3"{
+            HStack{
+                Image(systemName: "star.fill").foregroundColor(.yellow)
+                Image(systemName: "star.fill").foregroundColor(.yellow)
+                Image(systemName: "star.fill").foregroundColor(.yellow)
+                Image(systemName: "star").foregroundColor(.yellow)
+                Image(systemName: "star").foregroundColor(.yellow)
+                
+                
+            }
+        }
+            if rate == "4"{
+                HStack{
+                    Image(systemName: "star.fill").foregroundColor(.yellow)
+                    Image(systemName: "star.fill").foregroundColor(.yellow)
+                    Image(systemName: "star.fill").foregroundColor(.yellow)
+                    Image(systemName: "star.fill").foregroundColor(.yellow)
+                    Image(systemName: "star").foregroundColor(.yellow)
+                    
+                    
+                }
+            }
+            if rate == "5"{
+                HStack{
+                    Image(systemName: "star.fill").foregroundColor(.yellow)
+                    Image(systemName: "star.fill").foregroundColor(.yellow)
+                    Image(systemName: "star.fill").foregroundColor(.yellow)
+                    Image(systemName: "star.fill").foregroundColor(.yellow)
+                    Image(systemName: "star.fill").foregroundColor(.yellow)
+                    
+                    
+                    
+                }
+            }
+        }
+    }
+

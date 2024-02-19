@@ -17,7 +17,7 @@ struct InboxView:View {
         VStack{
             NavigationView{
                 List(model.msg){ mail in
-                    NavigationLink(destination: MessageStruct(helper: mail.helper, job_name: mail.job_name,hours:mail.hours,msg: mail.msg,phonenumber: mail.phonenumber)){
+                    NavigationLink(destination: MessageStruct(helper: mail.helper, job_name: mail.job_name,hours:mail.hours,msg: mail.msg,phonenumber: mail.phonenumber,job_id: mail.job_id)){
                         HStack{
                             VStack(alignment: .leading){
                                 HStack{
@@ -81,29 +81,41 @@ struct MessageStruct:View{
     @State var job_name:String
     @State var hours:String
     @State var msg:String
+
     @State var phonenumber:String
-
-    var body: some View{
-        Text("\(helper) has requested to help you \n \t[\(job_name)]! \n \n Message: \(msg)").fontWeight(.light).font(.title3)
-        Button("Contact") {
-            let number: String = phonenumber
-            let msg: String="Hi its \(username)."
-            let sms: String = "sms:\(number)&body=\(msg)"
-            let strURL: String = sms.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
-            UIApplication.shared.open(URL.init(string: strURL)!,options: [:],completionHandler: nil)
-        }
-        .padding()
-        .background(.yellow)
-        .foregroundStyle(.black)
-        .clipShape(Capsule())
-
-        Button("Accept") {
-            Task{
-                Task{ await createAcceptFunction(name: job_name, hours: hours,helper: helper)}
+    @State var job_id:String
+    @State var showButton = true
+    @State var showingAlert = false
+    
+     var body: some View{
+        VStack{
+            Text("\(helper) has requested to help you \n \t[\(job_name)]! \n \n Message: \(msg)").fontWeight(.light).font(.title3)
+            Button("Contact") {
+                let number: String = phonenumber
+                let msg: String="Hi its \(username)."
+                let sms: String = "sms:\(number)&body=\(msg)"
+                let strURL: String = sms.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+                UIApplication.shared.open(URL.init(string: strURL)!,options: [:],completionHandler: nil)
+            }
+            .padding()
+            .background(.yellow)
+            .foregroundStyle(.black)
+            .clipShape(Capsule())
+            
+            if showButton{
+                Button("Accept") {
+                    Task{
+                        Task{ await createAcceptFunction(name: job_name, hours: hours,helper: helper,job_id: job_id)}
+                        showingAlert.toggle()
+                        showButton.toggle()
+                    }
+                    
+                }.buttonStyle(GrowingButton())
             }
             
-        }.buttonStyle(GrowingButton())
-
+        }.alert("Job has been accepted, it will now apper in your 'My Tasks' screen.", isPresented: $showingAlert) {
+            Button("OK", role: .cancel) { }
+        }
     }
     
 }

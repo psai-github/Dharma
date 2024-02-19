@@ -24,6 +24,7 @@ struct Todo: Identifiable , Hashable{
     let profile_pic:String
     let onlyverified:Bool
     let hours:String
+    let status:String
 
 }
 
@@ -33,9 +34,9 @@ public class ViewModel: ObservableObject {
 //    @State var url = "hi"
     
     
-    init() {
-        getData()
-    }
+//    init() {
+//        getData(zipcode: mylocation)
+//    }
     func deleteData(todoToDelete: Todo) {
         
         // Get a reference to the database
@@ -62,13 +63,13 @@ public class ViewModel: ObservableObject {
                 
             }
         }
-        self.getData()
+//        self.getData(zipcode: mylocation)
    
         
     }
     
     
-    func getData(){
+    func getData(zipcode:String){
         
         // Get a reference to the database
         let db = Firestore.firestore()
@@ -76,7 +77,7 @@ public class ViewModel: ObservableObject {
 //        let profile_pic = await getimageUrl(ref: Storage.storage().reference().child("profile").child(+".png"))
         // Read the documents at a specific path
         
-        db.collection("jobs").whereField("zipcode", isEqualTo: mylocation).getDocuments { snapshot, error in
+        db.collection("jobs").whereField("zipcode", isEqualTo: zipcode).getDocuments { snapshot, error in
             
             // Check for errors
             if error == nil {
@@ -114,7 +115,8 @@ public class ViewModel: ObservableObject {
                                             img: d["img"] as? String ?? "" ,
                                             profile_pic: url1,
                                             onlyverified: d["onlyverified"] as? Bool ?? false,
-                                            hours: d["hours"] as? String ?? "")
+                                            hours: d["hours"] as? String ?? "",
+                                            status: d["status"] as? String ?? "")
                                            
                                 
                                 
@@ -140,36 +142,6 @@ public class ViewModel: ObservableObject {
     }
     
 
-    
-
-
-// Create the document in Firestore
-
-
-func createUser(name:String,des: String,creator:String,date:String,posted:String) {
-
-
-        let docData: [String: Any] = [
-            "name":name,
-            "des": des,
-            "creator":creator,
-            "date":date,
-            "posted":posted
-        ]
-        let db = Firestore.firestore()
-        
-        let docRef = db.collection("jobs").document()
-        
-        docRef.setData(docData) { error in
-            if let error = error {
-                print("Error writing document: \(error)")
-            } else {
-                print("Document successfully written!")
-            }
-        }
-
-
-}
     
 
 

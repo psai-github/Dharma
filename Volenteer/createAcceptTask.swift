@@ -11,7 +11,7 @@ import Firebase
 import FirebaseFirestore
 import FirebaseStorage
 
-func createAcceptFunction(name:String,hours:String,helper:String) async{
+func createAcceptFunction(name:String,hours:String,helper:String,job_id:String) async{
         @StateObject var locationManager = LocationManager()
        
        
@@ -22,7 +22,7 @@ func createAcceptFunction(name:String,hours:String,helper:String) async{
 
             do{
                
-                docRef.setData(["name": name,"helper":helper,"hours":hours,"helped":username,hours:"hours","date":Date.now,"done":false,"helped_contact":myphonenumber]) { error in
+                docRef.setData(["name": name,"helper":helper,"hours":hours,"helped":username,hours:"hours","date":Date.now,"done":false,"helped_contact":myphonenumber,"job_id":job_id]){ error in
                     if let error = error {
                         print("Error writing document: \(error)")
                     } else {

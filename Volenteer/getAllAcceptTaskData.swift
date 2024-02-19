@@ -24,6 +24,9 @@ struct AcceptStruct: Identifiable , Hashable{
     let date:String
     let done:Bool
     let phonenumber:String
+    let rating:String
+    let comment:String
+    let job_id:String
 
 
 
@@ -105,7 +108,7 @@ class AcceptModel: ObservableObject {
                             //                            var name = (d["creator"] as? String ?? "")!
                             // Create a InboxStruct item for each document returned
                             
-                            return AcceptStruct(id: d.documentID, name: d["name"] as? String ?? "", helper: d["helper"] as? String ?? "", des: d["des"] as? String ?? "", helped: d["helped"] as? String ?? "", hours: d["hours"] as? String ?? "", date: d["date"] as? String ?? "", done: d["done"] as? Bool ?? false,phonenumber:d["helped_contact"] as? String ?? "" )
+                            return AcceptStruct(id: d.documentID, name: d["name"] as? String ?? "", helper: d["helper"] as? String ?? "", des: d["des"] as? String ?? "", helped: d["helped"] as? String ?? "", hours: d["hours"] as? String ?? "", date: d["date"] as? String ?? "", done: d["done"] as? Bool ?? false,phonenumber:d["helped_contact"] as? String ?? "" ,rating: d["rate"] as? String ?? "",comment: d["comment"] as? String ?? "",job_id: d["job_id"] as? String ?? "")
                             
                             
                             
@@ -155,7 +158,7 @@ class AcceptModel: ObservableObject {
                             //                            var name = (d["creator"] as? String ?? "")!
                             // Create a InboxStruct item for each document returned
                             
-                            return AcceptStruct(id: d.documentID, name: d["name"] as? String ?? "", helper: d["helper"] as? String ?? "", des: d["des"] as? String ?? "", helped: d["helped"] as? String ?? "", hours: d["hours"] as? String ?? "", date: d["date"] as? String ?? "", done: d["done"] as? Bool ?? false,phonenumber:  myphonenumber)
+                            return AcceptStruct(id: d.documentID, name: d["name"] as? String ?? "", helper: d["helper"] as? String ?? "", des: d["des"] as? String ?? "", helped: d["helped"] as? String ?? "", hours: d["hours"] as? String ?? "", date: d["date"] as? String ?? "", done: d["done"] as? Bool ?? false,phonenumber:  myphonenumber,rating: d["rate"] as? String ?? "",comment: d["comment"] as? String ?? "",job_id: d["job_id"] as? String ?? "")
                             
                             
                             
